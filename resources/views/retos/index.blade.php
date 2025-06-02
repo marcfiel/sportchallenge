@@ -176,7 +176,7 @@
                     {{-- BOTÓN --}}
                     <div class="px-4 pb-4">
                         <button type="button"
-                            class="btn-toggle-reto w-full py-2 rounded font-semibold transition text-xs sm:text-sm md:text-base
+                            class="btn-toggle-reto w-full py-2 rounded font-semibold transition text-xs sm:text-sm md:text-base cursor-pointer
                         {{ $reto->ya_unido ? 'bg-white text-black border hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800' }}"
                             data-id="{{ $reto->id }}"
                             data-ya-unido="{{ $reto->ya_unido ? '1' : '0' }}">

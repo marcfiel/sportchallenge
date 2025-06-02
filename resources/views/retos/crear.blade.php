@@ -250,7 +250,7 @@
         <div class="mt-6">
             <button
                 type="submit"
-                class="w-full max-w-sm mx-auto block bg-green-600 hover:bg-green-700 text-white font-bold text-base sm:text-lg px-8 py-3 rounded-lg shadow-md transition-all duration-200">
+                class="w-full max-w-sm mx-auto block bg-green-600 hover:bg-green-700 text-white font-bold text-base sm:text-lg px-8 py-3 rounded-lg shadow-md transition-all duration-200 cursor-pointer">
                 Crear reto
             </button>
             <input type="hidden" name="confirmado" id="confirmado" value="0">
