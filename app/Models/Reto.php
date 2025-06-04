@@ -34,4 +34,8 @@ class Reto extends Model
     {
         return $this->belongsToMany(\App\Models\User::class, 'usuarios_retos', 'reto_id', 'usuario_id');
     }
+    public function usuariosQueSeUnieron()
+    {
+        return $this->hasMany(\App\Models\UsuariosReto::class, 'reto_id');
+    }
 }

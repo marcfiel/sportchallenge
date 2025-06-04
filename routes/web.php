@@ -108,7 +108,5 @@ Route::middleware('auth')->group(function () {
     Route::view('/legal/politica-privacidad', 'legal.politica-privacidad')->name('legal.privacidad');
     Route::view('/legal/terminos-uso', 'legal.terminos-uso')->name('legal.terminos');
 });
-Route::get('/prueba', function () {
-    return '✅ Laravel funciona en Hostinger';
-});
+
 

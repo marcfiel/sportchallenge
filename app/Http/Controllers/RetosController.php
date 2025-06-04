@@ -40,8 +40,23 @@ class RetosController extends Controller
 
         // 2. Recomendados para ti (guardar en sesión para persistencia)
         if (!session()->has('retos_recomendados_ids')) {
-            $ids = Reto::whereIn('tipo', ['usuario', 'oficial'])
-                ->whereDate('fecha_fin', '>=', $hoy)
+            $usuario = Auth::user();
+
+            $ids = Reto::whereDate('fecha_fin', '>=', $hoy)
+                ->where('tipo', '!=', 'diario') 
+                ->when($usuario->role !== 'admin', function ($query) use ($usuario) {
+                    $query->where(function ($q) use ($usuario) {
+                        $q->where('tipo', 'oficial')
+                            ->orWhere(function ($sub) use ($usuario) {
+                                $sub->where('tipo', 'usuario')
+                                    ->where('creador_id', $usuario->id);
+                            });
+                    });
+                })
+                ->whereDoesntHave('usuariosQueSeUnieron', function ($q) use ($usuario) {
+                    $q->where('usuario_id', $usuario->id)
+                        ->where('completado', true);
+                })
                 ->inRandomOrder()
                 ->take(3)
                 ->pluck('id')
@@ -49,6 +64,11 @@ class RetosController extends Controller
 
             session(['retos_recomendados_ids' => $ids]);
         }
+
+
+
+
+
 
         $idsRecomendados = session('retos_recomendados_ids');
         $retosRecomendados = Reto::whereIn('id', $idsRecomendados)->get();
@@ -59,12 +79,28 @@ class RetosController extends Controller
 
         foreach ($deportes as $deporte) {
             if (empty($filtros) || in_array($deporte, $filtros)) {
+                $usuario = Auth::user();
+
                 $retosPorCategoria[$deporte] = Reto::where('deporte', $deporte)
-                    ->whereIn('tipo', ['usuario', 'oficial'])
                     ->whereDate('fecha_fin', '>=', $hoy)
+                    ->where('tipo', '!=', 'diario') 
+                    ->when($usuario->role !== 'admin', function ($query) use ($usuario) {
+                        $query->where(function ($q) use ($usuario) {
+                            $q->where('tipo', 'oficial')
+                                ->orWhere(function ($sub) use ($usuario) {
+                                    $sub->where('tipo', 'usuario')
+                                        ->where('creador_id', $usuario->id);
+                                });
+                        });
+                    })
+                    ->whereDoesntHave('usuariosQueSeUnieron', function ($q) use ($usuario) {
+                        $q->where('usuario_id', $usuario->id)
+                            ->where('completado', true);
+                    })
                     ->get();
             }
         }
+
 
         // Añadir información de unión a los retos si hay usuario autenticado
         if (Auth::check()) {
