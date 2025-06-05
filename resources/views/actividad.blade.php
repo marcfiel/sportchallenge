@@ -124,7 +124,7 @@
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Mis estadísticas</h2>
 
             <div class="flex gap-4 mb-8 mt-8">
-                // Define las opciones de filtro de estadísticas por tipo de deporte
+                {{-- Define las opciones de filtro de estadísticas por tipo de deporte--}}
                 @php $deportes = ['correr' => '🏃‍♂️', 'caminar' => '🚶‍♂️', 'bicicleta' => '🚴‍♂️']; @endphp
 
                 @foreach ($deportes as $deporte => $icono)
