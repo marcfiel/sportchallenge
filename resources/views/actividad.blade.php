@@ -20,6 +20,8 @@
     // Evitar divisiones por cero o nulas
     if ($puntosSiguiente && $puntosSiguiente > $rangoBase) {
     $puntosParaSubir = max(0, $puntosSiguiente - $puntosActuales);
+
+    // Calcula el porcentaje de progreso para el sigueinte rango
     $progreso = min(100, intval((($puntosActuales - $rangoBase) / ($puntosSiguiente - $rangoBase)) * 100));
     } else {
     $puntosParaSubir = null;
@@ -34,9 +36,11 @@
     'Proactivo' => 'bg-purple-600',
     'Leyenda' => 'bg-yellow-600',
     ];
+
+    // Asigna un color visual a la barra según el rango del usuario
     $colorBarra = $coloresBarra[$rango['nombre']] ?? 'bg-gray-400';
 
-    // Clase de ancho
+    // Asigna una clase de ancho a la barra según el progreso
     if ($progreso >= 100) $claseAncho = 'w-full';
     elseif ($progreso >= 90) $claseAncho = 'w-11/12';
     elseif ($progreso >= 80) $claseAncho = 'w-10/12';
@@ -120,6 +124,7 @@
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Mis estadísticas</h2>
 
             <div class="flex gap-4 mb-8 mt-8">
+                // Define las opciones de filtro de estadísticas por tipo de deporte
                 @php $deportes = ['correr' => '🏃‍♂️', 'caminar' => '🚶‍♂️', 'bicicleta' => '🚴‍♂️']; @endphp
 
                 @foreach ($deportes as $deporte => $icono)
@@ -258,6 +263,7 @@
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
 
+                    // Lanza una alerta de tipo confirmación antes de reiniciar todos los logros (solo admin)
                     Swal.fire({
                         title: '¿Reiniciar todos los logros?',
                         text: 'Esta acción eliminará todos los logros conseguidos. ¿Estás seguro?',
@@ -280,6 +286,7 @@
 
 
     <script>
+        // Permite filtrar las estadísticas por deporte y actualiza la página con el nuevo valor
         document.querySelectorAll('.filtro-deporte').forEach(button => {
             button.addEventListener('click', function() {
                 const deporte = this.getAttribute('data-deporte');

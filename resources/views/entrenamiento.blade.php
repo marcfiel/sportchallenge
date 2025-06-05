@@ -112,9 +112,6 @@
         </div>
     </section>
 
-
-
-
     {{-- MOTIVACIÓN Y HÁBITOS --}}
     <section x-data="{ abierto: true }" class="transition-all">
         <div class="flex items-center justify-between mb-4 cursor-pointer select-none p-5 bg-green-200 rounded-xl" @click="abierto = !abierto">
@@ -190,6 +187,7 @@
             }
         });
 
+        // Guarda los hábitos marcados del día en localStorage y los muestra si se completan todos con un mensaje
         function guardarHabito(index) {
             const hoy = new Date().toISOString().split('T')[0];
             let guardados = JSON.parse(localStorage.getItem('habitos_checklist')) || {};

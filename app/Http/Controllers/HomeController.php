@@ -14,6 +14,7 @@ class HomeController extends Controller
         if (!Storage::exists('noticias.json')) {
             $noticiasSeleccionadas = [];
         } else {
+            // Cargamos el archivos json
             $json = Storage::get('noticias.json');
             $noticias = json_decode($json, true);
 
@@ -25,7 +26,7 @@ class HomeController extends Controller
             }
         }
 
-        // Retos activos (no completados ni abandonados)
+        // Se obtienen los retos activos del usuario autenticado
         $usuarioId = Auth::id();
 
         $retosActivos = Reto::whereHas('usuarios', function ($query) use ($usuarioId) {

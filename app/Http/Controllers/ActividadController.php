@@ -18,6 +18,8 @@ class ActividadController extends Controller
         $puntosActuales = $usuario->puntos ?? 0;
 
         $deporteElegido = $request->query('deporte', 'correr');
+
+        // Determina el tipo de actividad en Strava según el deporte que se ha elegido
         $tipoStrava = match ($deporteElegido) {
             'caminar' => 'walk',
             'bicicleta' => 'ride',
@@ -115,7 +117,7 @@ class ActividadController extends Controller
             ];
         }
 
-        // Premios destacados que NO están canjeados por el usuario
+        // Se obtiene un array con los premios que ya han sido canjeados por el usuario
         $premiosCanjeados = Canje::where('user_id', $usuario->id)
             ->pluck('recompensa_id')
             ->toArray();

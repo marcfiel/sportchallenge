@@ -23,13 +23,14 @@ class EntrenamientoController extends Controller
             ? json_decode(file_get_contents($pathEjercicios), true)
             : [];
 
-        // Elegimos 4 ejercicios distintos cada día (forma determinista)
+        // Elegimos 4 ejercicios distintos cada día
         $seed = Carbon::now()->dayOfYear;
         mt_srand($seed); // semilla basada en el día
         $ejerciciosOrdenados = $ejerciciosTodos;
         shuffle($ejerciciosOrdenados); // mezcla reproducible con mt_srand
         mt_srand(); // restaurar aleatoriedad normal
 
+        // Seleccionamos los 4 primeros ejercicios mezclados
         $ejerciciosDia = array_slice($ejerciciosOrdenados, 0, min(4, count($ejerciciosOrdenados)));
 
         return view('entrenamiento', compact('consejo', 'ejerciciosDia'));

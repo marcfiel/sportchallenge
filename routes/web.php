@@ -77,8 +77,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/actividad/{usuario}/reiniciar-logros', [ActividadController::class, 'reiniciarLogros'])->name('actividad.reiniciarLogros');
 
 
-
-
     // Entrenamiento
     Route::get('/entrenamiento', [EntrenamientoController::class, 'index'])->name('entrenamiento');
 
@@ -91,7 +89,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/premios/{id}', [PremioController::class, 'mostrar'])->name('premios.mostrar');
 
     Route::post('/premios/{id}/canjear', [PremioController::class, 'canjear'])->name('premios.canjear');
-
 
 
     // Perfil

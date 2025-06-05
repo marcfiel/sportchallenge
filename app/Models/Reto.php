@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reto extends Model
 {
-    protected $table = 'retos'; // ← importante si el nombre no sigue el plural en inglés
+    protected $table = 'retos';
     public $timestamps = false;
 
     protected $casts = [

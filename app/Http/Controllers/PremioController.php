@@ -14,7 +14,7 @@ class PremioController extends Controller
     public function index()
     {
         $usuario = Auth::user();
-
+        // Se obtienen todos los premios disponibles y actuales (por fechas)
         $premios = Premio::where('disponible', 1)
             ->where(function ($query) {
                 $now = now();
@@ -27,7 +27,7 @@ class PremioController extends Controller
             ->orderBy('puntos_necesarios', 'asc')
             ->get();
 
-        // Marcar y ordenar premios según si ya han sido canjeados
+        // Se marcan y ordenan premios según si ya han sido canjeados o no
         $premiosOrdenados = $premios->map(function ($premio) use ($usuario) {
             $yaCanjeado = false;
 
@@ -49,7 +49,7 @@ class PremioController extends Controller
         if ($request->has('from')) {
             session(['breadcrumb_from' => $request->query('from')]);
         }
-
+        // Se busca el premio y se verifica si el usuario ya lo ha canjeado
         $premio = Premio::findOrFail($id);
         $usuario = Auth::user();
 
@@ -90,10 +90,10 @@ class PremioController extends Controller
             'fecha_canje' => now(),
         ]);
 
-        //Asignar logros de canjeo de premios
+        // Se asignan logros segun el numero de premios canjeados
         $canjes = DB::table('canjes')->where('user_id', $user->id)->count();
 
-        if ($canjes >= 1) $this->asignarLogro($user->id, 10); // Primer canje
+        if ($canjes >= 1) $this->asignarLogro($user->id, 10); // Primer canjeo
         if ($canjes >= 5) $this->asignarLogro($user->id, 11); // Fan de recompensas
         if ($canjes >= 10) $this->asignarLogro($user->id, 12); // Coleccionista
 

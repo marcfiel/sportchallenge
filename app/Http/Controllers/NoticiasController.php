@@ -9,8 +9,6 @@ class NoticiasController extends Controller
     {
         $json = Storage::get('noticias.json');
         $noticias = json_decode($json, true);
-
-        // Buscar la noticia usando el ID
         $noticia = null;
 
         // Buscar la noticia en el array usando el id
@@ -21,7 +19,7 @@ class NoticiasController extends Controller
             }
         }
 
-        // Si no se encuentra la noticia, lanzar error 404
+        // Si no se encuentra la noticia, se lanza error 404
         if (!$noticia) {
             abort(404, 'Noticia no encontrada');
         }

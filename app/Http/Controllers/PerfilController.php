@@ -13,7 +13,7 @@ class PerfilController extends Controller
 {
     public function mostrarPerfil()
 {
-    $usuario = User::findOrFail(Auth::id()); // Esto asegura una instancia Eloquent
+    $usuario = User::findOrFail(Auth::id());
 
     $accessToken = StravaController::getValidAccessToken($usuario->id);
 
@@ -26,7 +26,7 @@ class PerfilController extends Controller
 
         if (str_starts_with($nuevaImagen, 'http')) {
             $usuario->profile_picture = $nuevaImagen;
-            $usuario->save(); // Ahora sí funciona
+            $usuario->save();
         }
     }
 

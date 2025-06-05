@@ -49,7 +49,6 @@ use Illuminate\Support\Facades\Auth;
 
         <a href="{{ route('retos.mostrar', ['id' => $reto->id, 'from' => 'home']) }}" class="block group">
             <div class="bg-white rounded-xl shadow hover:shadow-xl transition overflow-hidden flex">
-                {{-- Línea lateral diferenciadora --}}
                 <div class="{{ $bgIcon }} w-1.5 rounded-l-xl"></div>
 
                 {{-- Contenido del reto --}}
