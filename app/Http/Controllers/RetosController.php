@@ -348,6 +348,7 @@ class RetosController extends Controller
 
             // Sumar puntos al usuario
             $usuario->puntos += $puntosGanados;
+            /** @var \App\Models\User $usuario */
             $usuario->save();
 
             // Evaluar cambio de rango
