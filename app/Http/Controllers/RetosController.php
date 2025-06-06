@@ -43,7 +43,7 @@ class RetosController extends Controller
             $usuario = Auth::user();
 
             $ids = Reto::whereDate('fecha_fin', '>=', $hoy)
-                ->where('tipo', '!=', 'diario') 
+                ->where('tipo', '!=', 'diario')
                 ->when($usuario->role !== 'admin', function ($query) use ($usuario) {
                     $query->where(function ($q) use ($usuario) {
                         $q->where('tipo', 'oficial')
@@ -83,7 +83,7 @@ class RetosController extends Controller
 
                 $retosPorCategoria[$deporte] = Reto::where('deporte', $deporte)
                     ->whereDate('fecha_fin', '>=', $hoy)
-                    ->where('tipo', '!=', 'diario') 
+                    ->where('tipo', '!=', 'diario')
                     ->when($usuario->role !== 'admin', function ($query) use ($usuario) {
                         $query->where(function ($q) use ($usuario) {
                             $q->where('tipo', 'oficial')
@@ -133,7 +133,7 @@ class RetosController extends Controller
     }
 
 
-    
+
     public function mostrar($id, Request $request)
     {
         $reto = Reto::findOrFail($id);
@@ -225,8 +225,7 @@ class RetosController extends Controller
             return back()->with('status', 'Este reto aún no ha comenzado.');
         }
 
-        $union = DB::table('usuarios_retos')
-            ->where('usuario_id', $usuario->id)
+        $union = UsuariosReto::where('usuario_id', $usuario->id)
             ->where('reto_id', $id)
             ->first();
 
