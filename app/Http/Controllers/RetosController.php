@@ -19,13 +19,13 @@ class RetosController extends Controller
         $hoy = now()->toDateString();
         $filtros = $request->query('filtros', []);
 
-        // 1. Obtener reto diario del día actual
+        // 1. Reto diario
         $retoDiario = Reto::where('tipo', 'diario')
             ->whereDate('fecha_inicio', $hoy)
             ->whereDate('fecha_fin', $hoy)
             ->first();
 
-        // Se detecta si el usuario ha completado el reto diario
+        // Detectar si el usuario ha completado el reto diario
         $completadoRetoDiario = false;
 
         if ($retoDiario && Auth::check()) {
@@ -34,11 +34,11 @@ class RetosController extends Controller
             $union = UsuariosReto::where('usuario_id', $usuarioId)
                 ->where('reto_id', $retoDiario->id)
                 ->first();
-            
+
             $completadoRetoDiario = $union && $union->completado;
         }
 
-        // 2. Recomendados para ti
+        // 2. Recomendados para ti (guardar en sesión para persistencia)
         if (!session()->has('retos_recomendados_ids')) {
             $usuario = Auth::user();
 
@@ -65,10 +65,15 @@ class RetosController extends Controller
             session(['retos_recomendados_ids' => $ids]);
         }
 
+
+
+
+
+
         $idsRecomendados = session('retos_recomendados_ids');
         $retosRecomendados = Reto::whereIn('id', $idsRecomendados)->get();
 
-        // 3. Filtrar retos por tipo de deporte
+        // 3. Retos por categoría (sin excluir los recomendados)
         $deportes = ['correr', 'caminar', 'bicicleta', 'ejercicio'];
         $retosPorCategoria = [];
 
@@ -95,6 +100,7 @@ class RetosController extends Controller
                     ->get();
             }
         }
+
 
         // Añadir información de unión a los retos si hay usuario autenticado
         if (Auth::check()) {
@@ -125,6 +131,8 @@ class RetosController extends Controller
             'completadoRetoDiario'
         ));
     }
+
+
     
     public function mostrar($id, Request $request)
     {
@@ -147,6 +155,8 @@ class RetosController extends Controller
 
         return view('retos.mostrar', compact('reto', 'yaUnido', 'completado', 'abandonado', 'retoUsuario'));
     }
+
+
 
     public function unirse($id)
     {
@@ -245,7 +255,6 @@ class RetosController extends Controller
         $actividades = $response->json();
         $total = 0;
 
-        // Filtra las actividades según el tipo de deporte del reto
         foreach ($actividades as $actividad) {
             switch ($reto->deporte) {
                 case 'correr':
@@ -343,7 +352,7 @@ class RetosController extends Controller
             if ($countDiarios >= 25) $this->asignarLogro($usuarioId, 20); // 25 diarios
 
 
-            // Guardar rango anterior
+            // NUEVO: Guardar rango anterior
             $oldRango = $usuario->rango['nombre'] ?? null;
 
             // Sumar puntos al usuario
@@ -351,7 +360,7 @@ class RetosController extends Controller
             /** @var \App\Models\User $usuario */
             $usuario->save();
 
-            // Evaluar cambio de rango
+            // NUEVO: Evaluar cambio de rango
             $newRango = $usuario->rango['nombre'] ?? null;
 
             if ($oldRango && $newRango && $oldRango !== $newRango) {
@@ -365,6 +374,7 @@ class RetosController extends Controller
 
         return back()->with('status', "Progreso actual: $progreso de {$reto->objetivo_valor}");
     }
+
 
 
     public function abandonar($id)
@@ -382,9 +392,10 @@ class RetosController extends Controller
     }
 
 
+
+
     public function crear()
     {
-        // Se obtienen las futuras fechas de retos diarios que ya existen
         $fechasOcupadas = \App\Models\Reto::where('tipo', 'diario')
             ->whereDate('fecha_inicio', '>=', now()->toDateString())
             ->orderBy('fecha_inicio')
@@ -621,9 +632,12 @@ class RetosController extends Controller
 
         if ($completo) $this->asignarLogro($usuarioId, 9);
 
+
+
         return redirect()->route('retos.mostrar', $reto->id)
             ->with('success', 'Reto creado correctamente.');
     }
+
 
     private function asignarLogro($usuarioId, $logroId)
     {
@@ -640,6 +654,7 @@ class RetosController extends Controller
             ]);
         }
     }
+
 
     private function calcularMultiplicador($tipo, $valor, $diasDisponibles)
     {
@@ -670,6 +685,9 @@ class RetosController extends Controller
                 return 1;
         }
     }
+
+
+
 
     public function eliminar($id)
     {
